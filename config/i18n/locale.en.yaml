@@ -43,3 +43,80 @@ zipcode-delete-failed: Zipcode delete failed
 zipcode-invalid-id: Zipcode invalid ID
 zipcode-not-found: Zipcode not found
 zipcode-create-failed: Zipcode create failed
+bank-list-failed: Bank list failed
+bank-info-failed: Bank info failed
+bank-update-failed: Bank update failed
+bank-delete-failed: Bank delete failed
+bank-invalid-id: Bank invalid ID
+bank-not-found: Bank not found
+bank-create-failed: Bank create failed
+member-bank-account-invalid-id: Member bank account invalid ID
+member-bank-account-not-found: Member bank account not found
+member-bank-account-create-failed: Member bank account create failed
+member-bank-account-list-failed: Member bank account list failed
+member-bank-account-info-failed: Member bank account info failed
+member-bank-account-update-failed: Member bank account update failed
+member-bank-account-delete-failed: Member bank account delete failed
+category-invalid-id: Category invalid ID
+category-not-found: Category not found
+category-create-failed: Category create failed
+category-list-failed: Category list failed
+category-info-failed: Category info failed
+category-update-failed: Category update failed
+category-delete-failed: Category delete failed
+product-invalid-id: Product invalid ID
+product-not-found: Product not found
+product-create-failed: Product create failed
+product-list-failed: Product list failed
+product-info-failed: Product info failed
+product-update-failed: Product update failed
+product-delete-failed: Product delete failed
+product-image-invalid-id: Product image invalid ID
+product-image-not-found: Product image not found
+product-image-create-failed: Product image create failed
+product-image-list-failed: Product image list failed
+product-image-info-failed: Product image info failed
+product-image-update-failed: Product image update failed
+product-image-delete-failed: Product image delete failed
+product-attribute-invalid-id: Product attribute invalid ID
+product-attribute-not-found: Product attribute not found
+product-attribute-create-failed: Product attribute create failed
+product-attribute-list-failed: Product attribute list failed
+product-attribute-info-failed: Product attribute info failed
+product-attribute-update-failed: Product attribute update failed
+product-attribute-delete-failed: Product attribute delete failed
+product-attribute-value-invalid-id: Product attribute value invalid ID
+product-attribute-value-not-found: Product attribute value not found
+product-attribute-value-create-failed: Product attribute value create failed
+product-attribute-value-list-failed: Product attribute value list failed
+product-attribute-value-info-failed: Product attribute value info failed
+product-attribute-value-update-failed: Product attribute value update failed
+product-attribute-value-delete-failed: Product attribute value delete failed
+product-stock-invalid-id: Product stock invalid ID
+product-stock-not-found: Product stock not found
+product-stock-create-failed: Product stock create failed
+product-stock-list-failed: Product stock list failed
+product-stock-info-failed: Product stock info failed
+product-stock-update-failed: Product stock update failed
+product-stock-delete-failed: Product stock delete failed
+cart-invalid-id: Cart invalid ID
+cart-not-found: Cart not found
+cart-create-failed: Cart create failed
+cart-list-failed: Cart list failed
+cart-info-failed: Cart info failed
+cart-update-failed: Cart update failed
+cart-delete-failed: Cart delete failed
+cart-item-invalid-id: Cart item invalid ID
+cart-item-not-found: Cart item not found
+cart-item-create-failed: Cart item create failed
+cart-item-list-failed: Cart item list failed
+cart-item-info-failed: Cart item info failed
+cart-item-update-failed: Cart item update failed
+cart-item-delete-failed: Cart item delete failed
+brand-invalid-id: Brand invalid ID
+brand-not-found: Brand not found
+brand-create-failed: Brand create failed
+brand-list-failed: Brand list failed
+brand-info-failed: Brand info failed
+brand-update-failed: Brand update failed
+brand-delete-failed: Brand delete failed

@@ -338,7 +338,9 @@ if err != nil {
 }
 
 // HTTP status codes
-400 - Bad Request (validation errors)
+400 - Bad Request
+401 - Unauthorized
+412 - Precondition Failed (validation errors)
 404 - Not Found
 500 - Internal Server Error
 201 - Created (for POST)
