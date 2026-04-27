@@ -12,13 +12,15 @@ import (
 
 var _ entitiesinf.ZipcodeEntity = (*Service)(nil)
 
-// ListZipcodes returns all active zipcodes ordered by created_at.
+// ListZipcodes returns all active zipcodes ordered by sub-district and zipcode ascending.
 func (s *Service) ListZipcodes(ctx context.Context) ([]*ent.Zipcode, error) {
 	var zipcodes []*ent.Zipcode
 	err := s.db.NewSelect().
 		Model(&zipcodes).
 		Where("is_active = true").
-		OrderExpr("created_at ASC").
+		OrderExpr("sub_district_id ASC").
+		OrderExpr("name ASC").
+		OrderExpr("id ASC").
 		Scan(ctx)
 	return zipcodes, err
 }

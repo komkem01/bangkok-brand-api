@@ -12,13 +12,15 @@ import (
 
 var _ entitiesinf.SubdistrictEntity = (*Service)(nil)
 
-// ListSubdistricts returns all active sub-districts ordered by created_at.
+// ListSubdistricts returns all active sub-districts ordered by district and sub-district name ascending.
 func (s *Service) ListSubdistricts(ctx context.Context) ([]*ent.Subdistrict, error) {
 	var subdistricts []*ent.Subdistrict
 	err := s.db.NewSelect().
 		Model(&subdistricts).
 		Where("is_active = true").
-		OrderExpr("created_at ASC").
+		OrderExpr("district_id ASC").
+		OrderExpr("name ASC").
+		OrderExpr("id ASC").
 		Scan(ctx)
 	return subdistricts, err
 }

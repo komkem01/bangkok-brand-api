@@ -12,13 +12,14 @@ import (
 
 var _ entitiesinf.ProvinceEntity = (*Service)(nil)
 
-// ListProvinces returns all active provinces ordered by created_at.
+// ListProvinces returns all active provinces ordered by name ascending.
 func (s *Service) ListProvinces(ctx context.Context) ([]*ent.Province, error) {
 	var provinces []*ent.Province
 	err := s.db.NewSelect().
 		Model(&provinces).
 		Where("is_active = true").
-		OrderExpr("created_at ASC").
+		OrderExpr("name ASC").
+		OrderExpr("id ASC").
 		Scan(ctx)
 	return provinces, err
 }

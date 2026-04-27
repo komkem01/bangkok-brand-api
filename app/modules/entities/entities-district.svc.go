@@ -12,13 +12,15 @@ import (
 
 var _ entitiesinf.DistrictEntity = (*Service)(nil)
 
-// ListDistricts returns all active districts ordered by created_at.
+// ListDistricts returns all active districts ordered by province and district name ascending.
 func (s *Service) ListDistricts(ctx context.Context) ([]*ent.District, error) {
 	var districts []*ent.District
 	err := s.db.NewSelect().
 		Model(&districts).
 		Where("is_active = true").
-		OrderExpr("created_at ASC").
+		OrderExpr("province_id ASC").
+		OrderExpr("name ASC").
+		OrderExpr("id ASC").
 		Scan(ctx)
 	return districts, err
 }
