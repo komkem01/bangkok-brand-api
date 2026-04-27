@@ -4,19 +4,19 @@ import (
 	"log/slog"
 	"sync"
 
-	"mcop/app/modules/entities"
-	"mcop/app/modules/example"
-	"mcop/app/modules/sentry"
-	"mcop/app/modules/specs"
-	"mcop/internal/config"
-	"mcop/internal/database"
-	"mcop/internal/log"
-	"mcop/internal/otel/collector"
+	"bangkok-brand/app/modules/entities"
+	"bangkok-brand/app/modules/example"
+	"bangkok-brand/app/modules/sentry"
+	"bangkok-brand/app/modules/specs"
+	"bangkok-brand/internal/config"
+	"bangkok-brand/internal/database"
+	"bangkok-brand/internal/log"
+	"bangkok-brand/internal/otel/collector"
 
-	exampletwo "mcop/app/modules/example-two"
+	exampletwo "bangkok-brand/app/modules/example-two"
 
-	appConf "mcop/config"
-	// "mcop/app/modules/kafka"
+	appConf "bangkok-brand/config"
+	// "bangkok-brand/app/modules/kafka"
 )
 
 type Modules struct {

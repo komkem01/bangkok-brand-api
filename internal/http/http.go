@@ -9,10 +9,10 @@ import (
 	"os"
 	"time"
 
-	"mcop/app/modules"
-	"mcop/internal/log"
-	"mcop/internal/provider"
-	"mcop/routes"
+	"bangkok-brand/app/modules"
+	"bangkok-brand/internal/log"
+	"bangkok-brand/internal/provider"
+	"bangkok-brand/routes"
 
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"

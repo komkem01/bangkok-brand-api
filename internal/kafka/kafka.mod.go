@@ -1,7 +1,7 @@
 package kafka
 
 import (
-	"mcop/internal/config"
+	"bangkok-brand/internal/config"
 )
 
 type Module struct {

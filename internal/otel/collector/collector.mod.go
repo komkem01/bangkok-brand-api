@@ -1,6 +1,6 @@
 package collector
 
-import "mcop/internal/config"
+import "bangkok-brand/internal/config"
 
 type Module struct {
 	Svc *Service

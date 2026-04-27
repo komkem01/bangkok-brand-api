@@ -1,13 +1,13 @@
 package config
 
 import (
-	"mcop/app/modules/example"
-	exampletwo "mcop/app/modules/example-two"
-	"mcop/app/modules/sentry"
-	"mcop/app/modules/specs"
-	"mcop/internal/kafka"
-	"mcop/internal/log"
-	"mcop/internal/otel/collector"
+	"bangkok-brand/app/modules/example"
+	exampletwo "bangkok-brand/app/modules/example-two"
+	"bangkok-brand/app/modules/sentry"
+	"bangkok-brand/app/modules/specs"
+	"bangkok-brand/internal/kafka"
+	"bangkok-brand/internal/log"
+	"bangkok-brand/internal/otel/collector"
 )
 
 // Config is a struct that contains all the configuration of the application.
@@ -52,9 +52,9 @@ var App = Config{
 
 	HttpJsonNaming: "snake_case",
 
-	SslCaPath:      "mcop/cert/ca.pem",
-	SslPrivatePath: "mcop/cert/server.pem",
-	SslCertPath:    "mcop/cert/server-key.pem",
+	SslCaPath:      "bangkok-brand/cert/ca.pem",
+	SslPrivatePath: "bangkok-brand/cert/server.pem",
+	SslCertPath:    "bangkok-brand/cert/server-key.pem",
 
 	Otel: collector.Config{
 		CollectorEndpoint: "",

@@ -1,8 +1,8 @@
 package example
 
 import (
-	entitiesinf "mcop/app/modules/entities/inf"
-	"mcop/internal/config"
+	entitiesinf "bangkok-brand/app/modules/entities/inf"
+	"bangkok-brand/internal/config"
 
 	"go.opentelemetry.io/otel/trace"
 )

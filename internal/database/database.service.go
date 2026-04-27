@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"sync"
 
-	dto "mcop/internal/database/dto"
+	dto "bangkok-brand/internal/database/dto"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/stdlib"

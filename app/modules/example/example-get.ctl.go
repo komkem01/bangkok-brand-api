@@ -1,9 +1,9 @@
 package example
 
 import (
-	"mcop/app/utils"
-	"mcop/app/utils/base"
-	"mcop/config/i18n"
+	"bangkok-brand/app/utils"
+	"bangkok-brand/app/utils/base"
+	"bangkok-brand/config/i18n"
 
 	"github.com/gin-gonic/gin"
 	"github.com/oklog/ulid/v2"
