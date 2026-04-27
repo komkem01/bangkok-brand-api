@@ -4,10 +4,16 @@ import (
 	"log/slog"
 	"sync"
 
+	"bangkok-brand/app/modules/district"
 	"bangkok-brand/app/modules/entities"
 	"bangkok-brand/app/modules/example"
+	"bangkok-brand/app/modules/gender"
+	"bangkok-brand/app/modules/prefix"
+	"bangkok-brand/app/modules/province"
 	"bangkok-brand/app/modules/sentry"
 	"bangkok-brand/app/modules/specs"
+	"bangkok-brand/app/modules/subdistrict"
+	"bangkok-brand/app/modules/zipcode"
 	"bangkok-brand/internal/config"
 	"bangkok-brand/internal/database"
 	"bangkok-brand/internal/log"
@@ -28,8 +34,14 @@ type Modules struct {
 	DB     *database.DatabaseModule
 	ENT    *entities.Module
 	// Kafka *kafka.Module
-	Example  *example.Module
-	Example2 *exampletwo.Module
+	Example     *example.Module
+	Example2    *exampletwo.Module
+	Gender      *gender.Module
+	Prefix      *prefix.Module
+	Province    *province.Module
+	District    *district.Module
+	Subdistrict *subdistrict.Module
+	Zipcode     *zipcode.Module
 }
 
 func modulesInit() {
@@ -47,17 +59,30 @@ func modulesInit() {
 	entitiesMod := entities.New(db.Svc.DB())
 	exampleMod := example.New(config.Conf[example.Config](confMod.Svc), entitiesMod.Svc)
 	exampleMod2 := exampletwo.New(config.Conf[exampletwo.Config](confMod.Svc), entitiesMod.Svc)
+	genderMod := gender.New(config.Conf[gender.Config](confMod.Svc), entitiesMod.Svc)
+	prefixMod := prefix.New(config.Conf[prefix.Config](confMod.Svc), entitiesMod.Svc)
+	provinceMod := province.New(config.Conf[province.Config](confMod.Svc), entitiesMod.Svc)
+	districtMod := district.New(config.Conf[district.Config](confMod.Svc), entitiesMod.Svc)
+	subdistrictMod := subdistrict.New(config.Conf[subdistrict.Config](confMod.Svc), entitiesMod.Svc)
+	zipcodeMod := zipcode.New(config.Conf[zipcode.Config](confMod.Svc), entitiesMod.Svc)
 	// kafka := kafka.New(&conf.Kafka)
 	mod = &Modules{
-		Conf:     confMod,
-		Specs:    specsMod,
-		Log:      logMod,
-		OTEL:     otel,
-		Sentry:   sentryMod,
-		DB:       db,
-		ENT:      entitiesMod,
-		Example:  exampleMod,
-		Example2: exampleMod2,
+		Conf:        confMod,
+		Specs:       specsMod,
+		Log:         logMod,
+		OTEL:        otel,
+		Sentry:      sentryMod,
+		DB:          db,
+		ENT:         entitiesMod,
+		Example:     exampleMod,
+		Example2:    exampleMod2,
+		Gender:      genderMod,
+		Prefix:      prefixMod,
+		Province:    provinceMod,
+		District:    districtMod,
+		Subdistrict: subdistrictMod,
+		Zipcode:     zipcodeMod,
+		// Kafka: kafka,
 	}
 
 	log.Infof("all modules initialized")
