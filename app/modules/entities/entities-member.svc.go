@@ -2,6 +2,10 @@ package entities
 
 import (
 	"context"
+	"crypto/rand"
+	"fmt"
+	"math/big"
+	"strings"
 	"time"
 
 	"bangkok-brand/app/modules/entities/ent"
@@ -11,6 +15,8 @@ import (
 )
 
 var _ entitiesinf.MemberEntity = (*Service)(nil)
+
+const createMemberMaxRetries = 10
 
 func (s *Service) ListMembers(ctx context.Context) ([]*ent.Member, error) {
 	var members []*ent.Member
@@ -43,14 +49,45 @@ func (s *Service) GetMemberByEmail(ctx context.Context, email string) (*ent.Memb
 }
 
 func (s *Service) CreateMember(ctx context.Context, member *ent.Member) (*ent.Member, error) {
-	_, err := s.db.NewInsert().
-		Model(member).
-		Exec(ctx)
-	if err != nil {
+	for i := 0; i < createMemberMaxRetries; i++ {
+		if member.MemberNo == nil || strings.TrimSpace(*member.MemberNo) == "" {
+			generated, err := generateMemberNo()
+			if err != nil {
+				return nil, err
+			}
+			member.MemberNo = &generated
+		}
+
+		_, err := s.db.NewInsert().
+			Model(member).
+			Exec(ctx)
+		if err == nil {
+			return s.GetMemberByID(ctx, member.ID)
+		}
+
+		if isDuplicateMemberNoError(err) {
+			member.MemberNo = nil
+			continue
+		}
+
 		return nil, err
 	}
 
-	return s.GetMemberByID(ctx, member.ID)
+	return nil, fmt.Errorf("failed to generate unique member_no after %d attempts", createMemberMaxRetries)
+}
+
+func generateMemberNo() (string, error) {
+	n, err := rand.Int(rand.Reader, big.NewInt(1000000))
+	if err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("%06d", n.Int64()), nil
+}
+
+func isDuplicateMemberNoError(err error) bool {
+	errMsg := strings.ToLower(err.Error())
+	return strings.Contains(errMsg, "duplicate") && strings.Contains(errMsg, "member_no")
 }
 
 func (s *Service) UpdateMemberLastLoginByID(ctx context.Context, id uuid.UUID, lastedLogin *time.Time) error {

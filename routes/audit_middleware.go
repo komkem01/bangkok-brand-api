@@ -72,9 +72,14 @@ func auditLogMiddleware(mod *modules.Modules) gin.HandlerFunc {
 			"latency_ms":       time.Since(start).Milliseconds(),
 		}
 
+		auditAction, ok := methodToAuditAction(ctx.Request.Method)
+		if !ok {
+			return
+		}
+
 		item := &ent.AuditLog{
 			TableName:     tableNameFromPath(fullPath),
-			Action:        ctx.Request.Method,
+			Action:        auditAction,
 			ActorID:       actorID,
 			ActorType:     actorType,
 			OldValues:     oldValues,
@@ -246,6 +251,19 @@ func tableNameFromPath(path string) string {
 	}
 
 	return strings.ReplaceAll(trimmed, "/", "_")
+}
+
+func methodToAuditAction(method string) (string, bool) {
+	switch strings.ToUpper(strings.TrimSpace(method)) {
+	case "POST":
+		return "INSERT", true
+	case "PUT", "PATCH":
+		return "UPDATE", true
+	case "DELETE":
+		return "DELETE", true
+	default:
+		return "", false
+	}
 }
 
 func actorIDFromContext(ctx *gin.Context) *uuid.UUID {
