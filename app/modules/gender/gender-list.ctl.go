@@ -6,6 +6,7 @@ import (
 	"bangkok-brand/app/utils/base"
 
 	"github.com/gin-gonic/gin"
+	"bangkok-brand/config/i18n"
 )
 
 type ListResponse struct {
@@ -31,7 +32,7 @@ func (c *Controller) List(ctx *gin.Context) {
 	genders, err := c.svc.List(ctx.Request.Context())
 	if err != nil {
 		log.Errf("gender.list.error: %v", err)
-		base.InternalServerError(ctx, "gender-list-failed", nil)
+		base.InternalServerError(ctx, i18n.GenderListFailed, nil)
 		return
 	}
 

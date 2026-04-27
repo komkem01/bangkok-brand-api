@@ -1,10 +1,16 @@
 package config
 
 import (
+	"bangkok-brand/app/modules/district"
 	"bangkok-brand/app/modules/example"
 	exampletwo "bangkok-brand/app/modules/example-two"
+	"bangkok-brand/app/modules/gender"
+	"bangkok-brand/app/modules/prefix"
+	"bangkok-brand/app/modules/province"
 	"bangkok-brand/app/modules/sentry"
 	"bangkok-brand/app/modules/specs"
+	"bangkok-brand/app/modules/subdistrict"
+	"bangkok-brand/app/modules/zipcode"
 	"bangkok-brand/internal/kafka"
 	"bangkok-brand/internal/log"
 	"bangkok-brand/internal/otel/collector"
@@ -36,6 +42,13 @@ type Config struct {
 	Example example.Config
 
 	ExampleTwo exampletwo.Config
+
+	Gender      gender.Config
+	Prefix      prefix.Config
+	Province    province.Config
+	District    district.Config
+	Subdistrict subdistrict.Config
+	Zipcode     zipcode.Config
 }
 
 var App = Config{

@@ -3,6 +3,7 @@ package district
 import (
 	"bangkok-brand/app/utils"
 	"bangkok-brand/app/utils/base"
+	"bangkok-brand/config/i18n"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -18,14 +19,14 @@ func (c *Controller) Delete(ctx *gin.Context) {
 	defer span.End()
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
-		base.BadRequest(ctx, "invalid-id", nil)
+		base.BadRequest(ctx, i18n.DistrictInvalidID, nil)
 		return
 	}
 
 	id := uuid.MustParse(req.ID)
 	if err := c.svc.Delete(ctx.Request.Context(), id); err != nil {
 		log.Errf("district.delete.error: %v", err)
-		base.InternalServerError(ctx, "district-delete-failed", nil)
+		base.InternalServerError(ctx, i18n.DistrictDeleteFailed, nil)
 		return
 	}
 

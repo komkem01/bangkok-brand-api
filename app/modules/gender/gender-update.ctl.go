@@ -7,6 +7,8 @@ import (
 	"bangkok-brand/app/utils"
 	"bangkok-brand/app/utils/base"
 
+	"bangkok-brand/config/i18n"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
@@ -28,11 +30,11 @@ func (c *Controller) Update(ctx *gin.Context) {
 	defer span.End()
 
 	if err := ctx.ShouldBindUri(&uri); err != nil {
-		base.BadRequest(ctx, "invalid-id", nil)
+		base.BadRequest(ctx, i18n.GenderInvalidID, nil)
 		return
 	}
 	if err := ctx.ShouldBindJSON(&body); err != nil {
-		base.BadRequest(ctx, "invalid-request", nil)
+		base.BadRequest(ctx, i18n.BadRequest, nil)
 		return
 	}
 
@@ -41,11 +43,11 @@ func (c *Controller) Update(ctx *gin.Context) {
 	current, err := c.svc.Info(ctx.Request.Context(), id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			base.BadRequest(ctx, "gender-not-found", nil)
+			base.BadRequest(ctx, i18n.GenderNotFound, nil)
 			return
 		}
 		log.Errf("gender.update.fetch.error: %v", err)
-		base.InternalServerError(ctx, "gender-update-failed", nil)
+		base.InternalServerError(ctx, i18n.GenderUpdateFailed, nil)
 		return
 	}
 
@@ -67,7 +69,7 @@ func (c *Controller) Update(ctx *gin.Context) {
 	gender, err := c.svc.Update(ctx.Request.Context(), id, input)
 	if err != nil {
 		log.Errf("gender.update.error: %v", err)
-		base.InternalServerError(ctx, "gender-update-failed", nil)
+		base.InternalServerError(ctx, i18n.GenderUpdateFailed, nil)
 		return
 	}
 

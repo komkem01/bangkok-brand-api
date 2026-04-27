@@ -4,6 +4,7 @@ import (
 	"bangkok-brand/app/modules/entities/ent"
 	"bangkok-brand/app/utils"
 	"bangkok-brand/app/utils/base"
+	"bangkok-brand/config/i18n"
 
 	"github.com/gin-gonic/gin"
 )
@@ -36,7 +37,7 @@ func (c *Controller) List(ctx *gin.Context) {
 	subdistricts, err := c.svc.List(ctx.Request.Context())
 	if err != nil {
 		log.Errf("subdistrict.list.error: %v", err)
-		base.InternalServerError(ctx, "subdistrict-list-failed", nil)
+		base.InternalServerError(ctx, i18n.SubdistrictListFailed, nil)
 		return
 	}
 

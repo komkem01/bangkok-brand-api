@@ -6,6 +6,7 @@ import (
 
 	"bangkok-brand/app/utils"
 	"bangkok-brand/app/utils/base"
+	"bangkok-brand/config/i18n"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -23,7 +24,7 @@ func (c *Controller) Info(ctx *gin.Context) {
 	defer span.End()
 
 	if err := ctx.ShouldBindUri(&req); err != nil {
-		base.BadRequest(ctx, "invalid-id", nil)
+		base.BadRequest(ctx, i18n.PrefixInvalidID, nil)
 		return
 	}
 
@@ -31,11 +32,11 @@ func (c *Controller) Info(ctx *gin.Context) {
 	p, err := c.svc.Info(ctx.Request.Context(), id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			base.BadRequest(ctx, "prefix-not-found", nil)
+			base.BadRequest(ctx, i18n.PrefixNotFound, nil)
 			return
 		}
 		log.Errf("prefix.info.error: %v", err)
-		base.InternalServerError(ctx, "prefix-info-failed", nil)
+		base.InternalServerError(ctx, i18n.PrefixInfoFailed, nil)
 		return
 	}
 

@@ -6,6 +6,7 @@ import (
 
 	"bangkok-brand/app/utils"
 	"bangkok-brand/app/utils/base"
+	"bangkok-brand/config/i18n"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -28,11 +29,11 @@ func (c *Controller) Update(ctx *gin.Context) {
 	defer span.End()
 
 	if err := ctx.ShouldBindUri(&uri); err != nil {
-		base.BadRequest(ctx, "invalid-id", nil)
+		base.BadRequest(ctx, i18n.SubdistrictInvalidID, nil)
 		return
 	}
 	if err := ctx.ShouldBindJSON(&body); err != nil {
-		base.BadRequest(ctx, "invalid-request", nil)
+		base.BadRequest(ctx, i18n.BadRequest, nil)
 		return
 	}
 
@@ -40,11 +41,11 @@ func (c *Controller) Update(ctx *gin.Context) {
 	current, err := c.svc.Info(ctx.Request.Context(), id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			base.BadRequest(ctx, "subdistrict-not-found", nil)
+			base.BadRequest(ctx, i18n.SubdistrictNotFound, nil)
 			return
 		}
 		log.Errf("subdistrict.update.fetch.error: %v", err)
-		base.InternalServerError(ctx, "subdistrict-update-failed", nil)
+		base.InternalServerError(ctx, i18n.SubdistrictUpdateFailed, nil)
 		return
 	}
 
@@ -67,7 +68,7 @@ func (c *Controller) Update(ctx *gin.Context) {
 	subdistrict, err := c.svc.Update(ctx.Request.Context(), id, input)
 	if err != nil {
 		log.Errf("subdistrict.update.error: %v", err)
-		base.InternalServerError(ctx, "subdistrict-update-failed", nil)
+		base.InternalServerError(ctx, i18n.SubdistrictUpdateFailed, nil)
 		return
 	}
 
