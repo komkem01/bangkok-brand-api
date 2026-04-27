@@ -14,6 +14,8 @@ type ListResponse struct {
 	NameTh   string `json:"name_th"`
 	NameEn   string `json:"name_en"`
 	IsActive bool   `json:"is_active"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
 }
 
 func toListResponse(g *ent.Gender) ListResponse {
@@ -22,6 +24,8 @@ func toListResponse(g *ent.Gender) ListResponse {
 		NameTh:   g.NameTh,
 		NameEn:   g.NameEn,
 		IsActive: g.IsActive,
+		CreatedAt: g.CreatedAt.Format(utils.RFC3339Milli),
+		UpdatedAt: g.UpdatedAt.Format(utils.RFC3339Milli),
 	}
 }
 

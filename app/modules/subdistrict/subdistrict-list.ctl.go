@@ -14,6 +14,8 @@ type ListResponse struct {
 	DistrictID *string `json:"district_id"`
 	Name       string  `json:"name"`
 	IsActive   bool    `json:"is_active"`
+	CreatedAt  string  `json:"created_at"`
+	UpdatedAt  string  `json:"updated_at"`
 }
 
 func toListResponse(sd *ent.Subdistrict) ListResponse {
@@ -27,6 +29,8 @@ func toListResponse(sd *ent.Subdistrict) ListResponse {
 		DistrictID: districtID,
 		Name:       sd.Name,
 		IsActive:   sd.IsActive,
+		CreatedAt:  sd.CreatedAt.Format(utils.RFC3339Milli),
+		UpdatedAt:  sd.UpdatedAt.Format(utils.RFC3339Milli),
 	}
 }
 

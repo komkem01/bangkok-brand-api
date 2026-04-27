@@ -14,12 +14,13 @@ type Module struct {
 	Ctl    *Controller
 }
 
-func New(conf *config.Config[Config], db entitiesinf.PrefixEntity) *Module {
+func New(conf *config.Config[Config], db entitiesinf.PrefixEntity, dbGender entitiesinf.GenderEntity) *Module {
 	tracer := otel.Tracer("bangkok-brand.modules.prefix")
 	svc := newService(&Options{
-		Config: conf,
-		tracer: tracer,
-		db:     db,
+		Config:   conf,
+		tracer:   tracer,
+		db:       db,
+		dbGender: dbGender,
 	})
 	return &Module{
 		tracer: tracer,

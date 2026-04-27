@@ -20,6 +20,13 @@ func (s *Service) Info(ctx context.Context, id uuid.UUID) (*ent.Prefix, error) {
 		return nil, err
 	}
 
+	if p.GenderID != nil {
+		g, err := s.dbGender.GetGenderByID(ctx, *p.GenderID)
+		if err == nil {
+			p.GenderName = &g.NameTh
+		}
+	}
+
 	log.Infof("prefix.info.ok id=%s", id)
 	return p, nil
 }

@@ -14,6 +14,8 @@ type ListResponse struct {
 	ProvinceID *string `json:"province_id"`
 	Name       string  `json:"name"`
 	IsActive   bool    `json:"is_active"`
+	CreatedAt  string  `json:"created_at"`
+	UpdatedAt  string  `json:"updated_at"`
 }
 
 func toListResponse(d *ent.District) ListResponse {
@@ -27,6 +29,8 @@ func toListResponse(d *ent.District) ListResponse {
 		ProvinceID: provinceID,
 		Name:       d.Name,
 		IsActive:   d.IsActive,
+		CreatedAt:  d.CreatedAt.Format(utils.RFC3339Milli),
+		UpdatedAt:  d.UpdatedAt.Format(utils.RFC3339Milli),
 	}
 }
 

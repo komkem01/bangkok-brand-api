@@ -13,13 +13,17 @@ type ListResponse struct {
 	ID       string `json:"id"`
 	Name     string `json:"name"`
 	IsActive bool   `json:"is_active"`
+	CreatedAt string `json:"created_at"`
+	UpdatedAt string `json:"updated_at"`
 }
 
 func toListResponse(p *ent.Province) ListResponse {
 	return ListResponse{
-		ID:       p.ID.String(),
-		Name:     p.Name,
-		IsActive: p.IsActive,
+		ID:        p.ID.String(),
+		Name:      p.Name,
+		IsActive:  p.IsActive,
+		CreatedAt: p.CreatedAt.Format(utils.RFC3339Milli),
+		UpdatedAt: p.UpdatedAt.Format(utils.RFC3339Milli),
 	}
 }
 

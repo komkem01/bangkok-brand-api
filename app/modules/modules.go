@@ -60,7 +60,7 @@ func modulesInit() {
 	exampleMod := example.New(config.Conf[example.Config](confMod.Svc), entitiesMod.Svc)
 	exampleMod2 := exampletwo.New(config.Conf[exampletwo.Config](confMod.Svc), entitiesMod.Svc)
 	genderMod := gender.New(config.Conf[gender.Config](confMod.Svc), entitiesMod.Svc)
-	prefixMod := prefix.New(config.Conf[prefix.Config](confMod.Svc), entitiesMod.Svc)
+	prefixMod := prefix.New(config.Conf[prefix.Config](confMod.Svc), entitiesMod.Svc, entitiesMod.Svc)
 	provinceMod := province.New(config.Conf[province.Config](confMod.Svc), entitiesMod.Svc)
 	districtMod := district.New(config.Conf[district.Config](confMod.Svc), entitiesMod.Svc)
 	subdistrictMod := subdistrict.New(config.Conf[subdistrict.Config](confMod.Svc), entitiesMod.Svc)

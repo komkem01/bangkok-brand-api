@@ -10,23 +10,31 @@ import (
 )
 
 type ListResponse struct {
-	ID       string  `json:"id"`
-	GenderID *string `json:"gender_id,omitempty"`
-	NameTh   string  `json:"name_th"`
-	NameEn   string  `json:"name_en"`
-	IsActive bool    `json:"is_active"`
+	ID         string  `json:"id"`
+	GenderID   *string `json:"gender_id,omitempty"`
+	GenderName *string `json:"gender_name,omitempty"`
+	NameTh     string  `json:"name_th"`
+	NameEn     string  `json:"name_en"`
+	IsActive   bool    `json:"is_active"`
+	CreatedAt  string  `json:"created_at"`
+	UpdatedAt  string  `json:"updated_at"`
 }
 
 func toListResponse(p *ent.Prefix) ListResponse {
 	res := ListResponse{
-		ID:       p.ID.String(),
-		NameTh:   p.NameTh,
-		NameEn:   p.NameEn,
-		IsActive: p.IsActive,
+		ID:        p.ID.String(),
+		NameTh:    p.NameTh,
+		NameEn:    p.NameEn,
+		IsActive:  p.IsActive,
+		CreatedAt: p.CreatedAt.Format(utils.RFC3339Milli),
+		UpdatedAt: p.UpdatedAt.Format(utils.RFC3339Milli),
 	}
 	if p.GenderID != nil {
 		s := p.GenderID.String()
 		res.GenderID = &s
+		if p.GenderName != nil {
+			res.GenderName = p.GenderName
+		}
 	}
 	return res
 }

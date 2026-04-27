@@ -11,6 +11,8 @@ import (
 	"github.com/jinzhu/copier"
 )
 
+const RFC3339Milli = "2006-01-02T15:04:05.000Z07:00"
+
 func ConvertToType[T any](input any) (T, error) {
 	var result T
 

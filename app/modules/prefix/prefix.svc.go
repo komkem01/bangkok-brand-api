@@ -10,6 +10,7 @@ import (
 type Service struct {
 	tracer trace.Tracer
 	db     entitiesinf.PrefixEntity
+	dbGender entitiesinf.GenderEntity
 }
 
 type Config struct{}
@@ -18,11 +19,13 @@ type Options struct {
 	*config.Config[Config]
 	tracer trace.Tracer
 	db     entitiesinf.PrefixEntity
+	dbGender entitiesinf.GenderEntity
 }
 
 func newService(opt *Options) *Service {
 	return &Service{
 		tracer: opt.tracer,
 		db:     opt.db,
+		dbGender: opt.dbGender,
 	}
 }
