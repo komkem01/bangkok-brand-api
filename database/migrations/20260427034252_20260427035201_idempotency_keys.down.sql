@@ -1,0 +1,6 @@
+SET statement_timeout = 0;
+
+--bun:split
+
+DROP INDEX IF EXISTS idx_idempotency_keys_expires_at;
+DROP TABLE IF EXISTS idempotency_keys;
