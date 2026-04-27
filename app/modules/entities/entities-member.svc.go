@@ -2,9 +2,6 @@ package entities
 
 import (
 	"context"
-	"crypto/rand"
-	"fmt"
-	"math/big"
 	"strings"
 	"time"
 
@@ -15,8 +12,6 @@ import (
 )
 
 var _ entitiesinf.MemberEntity = (*Service)(nil)
-
-const createMemberMaxRetries = 10
 
 func (s *Service) ListMembers(ctx context.Context) ([]*ent.Member, error) {
 	var members []*ent.Member
@@ -49,45 +44,34 @@ func (s *Service) GetMemberByEmail(ctx context.Context, email string) (*ent.Memb
 }
 
 func (s *Service) CreateMember(ctx context.Context, member *ent.Member) (*ent.Member, error) {
-	for i := 0; i < createMemberMaxRetries; i++ {
-		if member.MemberNo == nil || strings.TrimSpace(*member.MemberNo) == "" {
-			generated, err := generateMemberNo()
-			if err != nil {
-				return nil, err
-			}
-			member.MemberNo = &generated
+	if member.MemberNo == nil || strings.TrimSpace(*member.MemberNo) == "" {
+		generated, err := s.generateMemberNo(ctx)
+		if err != nil {
+			return nil, err
 		}
+		member.MemberNo = &generated
+	}
 
-		_, err := s.db.NewInsert().
-			Model(member).
-			Exec(ctx)
-		if err == nil {
-			return s.GetMemberByID(ctx, member.ID)
-		}
-
-		if isDuplicateMemberNoError(err) {
-			member.MemberNo = nil
-			continue
-		}
-
+	_, err := s.db.NewInsert().
+		Model(member).
+		Exec(ctx)
+	if err != nil {
 		return nil, err
 	}
 
-	return nil, fmt.Errorf("failed to generate unique member_no after %d attempts", createMemberMaxRetries)
+	return s.GetMemberByID(ctx, member.ID)
 }
 
-func generateMemberNo() (string, error) {
-	n, err := rand.Int(rand.Reader, big.NewInt(1000000))
+func (s *Service) generateMemberNo(ctx context.Context) (string, error) {
+	var memberNo string
+	err := s.db.NewSelect().
+		ColumnExpr("LPAD(nextval('members_member_no_seq')::text, 6, '0')").
+		Scan(ctx, &memberNo)
 	if err != nil {
 		return "", err
 	}
 
-	return fmt.Sprintf("%06d", n.Int64()), nil
-}
-
-func isDuplicateMemberNoError(err error) bool {
-	errMsg := strings.ToLower(err.Error())
-	return strings.Contains(errMsg, "duplicate") && strings.Contains(errMsg, "member_no")
+	return memberNo, nil
 }
 
 func (s *Service) UpdateMemberLastLoginByID(ctx context.Context, id uuid.UUID, lastedLogin *time.Time) error {
@@ -110,7 +94,6 @@ func (s *Service) UpdateMemberByID(ctx context.Context, id uuid.UUID, member *en
 		Set("prefix_id = ?", member.PrefixID).
 		Set("email = ?", member.Email).
 		Set("password = ?", member.Password).
-		Set("member_no = ?", member.MemberNo).
 		Set("profile_image_id = ?", member.ProfileImageID).
 		Set("displayname = ?", member.Displayname).
 		Set("firstname_th = ?", member.FirstnameTh).

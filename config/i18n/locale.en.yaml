@@ -120,3 +120,24 @@ brand-list-failed: Brand list failed
 brand-info-failed: Brand info failed
 brand-update-failed: Brand update failed
 brand-delete-failed: Brand delete failed
+contact-type-invalid-id: Contact type invalid ID
+contact-type-not-found: Contact type not found
+contact-type-create-failed: Contact type create failed
+contact-type-list-failed: Contact type list failed
+contact-type-info-failed: Contact type info failed
+contact-type-update-failed: Contact type update failed
+contact-type-delete-failed: Contact type delete failed
+address-type-invalid-id: Address type invalid ID
+address-type-not-found: Address type not found
+address-type-create-failed: Address type create failed
+address-type-list-failed: Address type list failed
+address-type-info-failed: Address type info failed
+address-type-update-failed: Address type update failed
+address-type-delete-failed: Address type delete failed
+member-device-invalid-id: Member device invalid ID
+member-device-not-found: Member device not found
+member-device-create-failed: Member device create failed
+member-device-list-failed: Member device list failed
+member-device-info-failed: Member device info failed
+member-device-update-failed: Member device update failed
+member-device-delete-failed: Member device delete failed

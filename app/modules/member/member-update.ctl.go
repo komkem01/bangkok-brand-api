@@ -31,7 +31,6 @@ type UpdateBodyRequest struct {
 	PrefixID       *string `json:"prefix_id"`
 	Email          *string `json:"email"`
 	Password       *string `json:"password"`
-	MemberNo       *string `json:"member_no"`
 	ProfileImageID *string `json:"profile_image_id"`
 	Displayname    *string `json:"displayname"`
 	FirstnameTh    *string `json:"firstname_th"`
@@ -148,9 +147,6 @@ func (c *Controller) Update(ctx *gin.Context) {
 	}
 	if body.Password != nil {
 		input.Password = body.Password
-	}
-	if body.MemberNo != nil {
-		input.MemberNo = body.MemberNo
 	}
 	if body.Displayname != nil {
 		input.Displayname = body.Displayname

@@ -1,6 +1,9 @@
 package address
 
 import (
+	"database/sql"
+	"errors"
+
 	"bangkok-brand/app/utils"
 	"bangkok-brand/app/utils/base"
 	"bangkok-brand/config/i18n"
@@ -26,6 +29,28 @@ func (c *Controller) Delete(ctx *gin.Context) {
 	}
 
 	id := uuid.MustParse(req.ID)
+	memberID, err := currentMemberID(ctx)
+	if err != nil {
+		base.Unauthorized(ctx, i18n.Unauthorized, nil)
+		return
+	}
+
+	item, err := c.svc.Info(ctx.Request.Context(), id)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			base.BadRequest(ctx, i18n.AddressNotFound, nil)
+			return
+		}
+		log.Errf("address.delete.fetch.error: %v", err)
+		base.InternalServerError(ctx, i18n.AddressDeleteFailed, nil)
+		return
+	}
+
+	if item.MemberID == nil || *item.MemberID != memberID {
+		base.BadRequest(ctx, i18n.AddressNotFound, nil)
+		return
+	}
+
 	if err := c.svc.Delete(ctx.Request.Context(), id); err != nil {
 		log.Errf("address.delete.error: %v", err)
 		base.InternalServerError(ctx, i18n.AddressDeleteFailed, nil)

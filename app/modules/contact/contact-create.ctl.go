@@ -11,7 +11,6 @@ import (
 )
 
 type CreateBodyRequest struct {
-	MemberID      *string `json:"member_id"`
 	ContactTypeID *string `json:"contact_type_id"`
 	Value         *string `json:"value"`
 	IsPrimary     *bool   `json:"is_primary"`
@@ -30,15 +29,13 @@ func (c *Controller) Create(ctx *gin.Context) {
 		return
 	}
 
-	item := &ent.MemberContact{}
-	if body.MemberID != nil {
-		v, err := uuid.Parse(*body.MemberID)
-		if err != nil {
-			base.BadRequest(ctx, i18n.BadRequest, nil)
-			return
-		}
-		item.MemberID = &v
+	memberID, err := currentMemberID(ctx)
+	if err != nil {
+		base.Unauthorized(ctx, i18n.Unauthorized, nil)
+		return
 	}
+
+	item := &ent.MemberContact{MemberID: &memberID}
 	if body.ContactTypeID != nil {
 		v, err := uuid.Parse(*body.ContactTypeID)
 		if err != nil {

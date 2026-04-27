@@ -11,7 +11,6 @@ import (
 )
 
 type CreateBodyRequest struct {
-	MemberID       *string  `json:"member_id"`
 	AddressTypeID  *string  `json:"address_type_id"`
 	AddressName    *string  `json:"address_name"`
 	RecipientName  *string  `json:"recipient_name"`
@@ -38,15 +37,13 @@ func (c *Controller) Create(ctx *gin.Context) {
 		return
 	}
 
-	item := &ent.MemberAddress{}
-	if body.MemberID != nil {
-		v, err := uuid.Parse(*body.MemberID)
-		if err != nil {
-			base.BadRequest(ctx, i18n.BadRequest, nil)
-			return
-		}
-		item.MemberID = &v
+	memberID, err := currentMemberID(ctx)
+	if err != nil {
+		base.Unauthorized(ctx, i18n.Unauthorized, nil)
+		return
 	}
+
+	item := &ent.MemberAddress{MemberID: &memberID}
 	if body.AddressTypeID != nil {
 		v, err := uuid.Parse(*body.AddressTypeID)
 		if err != nil {

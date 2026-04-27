@@ -21,6 +21,16 @@ func (s *Service) ListAddresses(ctx context.Context) ([]*ent.MemberAddress, erro
 	return addresses, err
 }
 
+func (s *Service) ListAddressesByMemberID(ctx context.Context, memberID uuid.UUID) ([]*ent.MemberAddress, error) {
+	var addresses []*ent.MemberAddress
+	err := s.db.NewSelect().
+		Model(&addresses).
+		Where("member_id = ?", memberID).
+		OrderExpr("created_at DESC").
+		Scan(ctx)
+	return addresses, err
+}
+
 func (s *Service) GetAddressByID(ctx context.Context, id uuid.UUID) (*ent.MemberAddress, error) {
 	address := &ent.MemberAddress{}
 	err := s.db.NewSelect().

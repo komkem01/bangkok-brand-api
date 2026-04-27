@@ -1,8 +1,6 @@
 package auth
 
 import (
-	"context"
-	"database/sql"
 	"errors"
 	"fmt"
 	"strings"
@@ -10,13 +8,10 @@ import (
 
 	"bangkok-brand/app/modules/entities/ent"
 	entitiesinf "bangkok-brand/app/modules/entities/inf"
-	"bangkok-brand/app/utils"
-	"bangkok-brand/app/utils/hashing"
 	"bangkok-brand/internal/config"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/trace"
 )
 
@@ -43,6 +38,8 @@ type Options struct {
 	Config *config.Config[Config]
 	tracer trace.Tracer
 	db     entitiesinf.MemberEntity
+	ctdb   entitiesinf.ContactEntity
+	cttdb  entitiesinf.ContactTypeEntity
 }
 
 type Service struct {
@@ -50,11 +47,20 @@ type Service struct {
 }
 
 type RegisterInput struct {
-	Email     string
-	Password  string
-	Phone     *string
-	Firstname *string
-	Lastname  *string
+	GenderID      *uuid.UUID
+	PrefixID      *uuid.UUID
+	Email         string
+	Password      string
+	Displayname   *string
+	Firstname     *string
+	Lastname      *string
+	CitizenID     *string
+	Birthdate     *time.Time
+	Phone         *string
+	ProvinceID    *uuid.UUID
+	DistrictID    *uuid.UUID
+	SubDistrictID *uuid.UUID
+	ZipcodeID     *uuid.UUID
 }
 
 type LoginInput struct {
@@ -97,182 +103,6 @@ type tokenPayload struct {
 
 func newService(opts *Options) *Service {
 	return &Service{Options: opts}
-}
-
-func (s *Service) Register(ctx context.Context, in *RegisterInput) (*AuthResult, error) {
-	ctx, span, log := utils.NewLogSpan(ctx, s.tracer, "auth.Register")
-	defer span.End()
-
-	email := normalizeEmail(in.Email)
-	password := strings.TrimSpace(in.Password)
-	if email == "" || password == "" {
-		return nil, ErrInvalidCredentials
-	}
-
-	if len(password) < 8 {
-		return nil, ErrInvalidCredentials
-	}
-
-	_, err := s.db.GetMemberByEmail(ctx, email)
-	if err == nil {
-		return nil, ErrEmailExists
-	}
-	if !errors.Is(err, sql.ErrNoRows) {
-		span.RecordError(err)
-		log.Errf("auth.register.lookup.error email=%s err=%v", email, err)
-		return nil, err
-	}
-
-	hashed, err := hashing.HashPassword(password)
-	if err != nil {
-		span.RecordError(err)
-		return nil, fmt.Errorf("hash password: %w", err)
-	}
-
-	now := time.Now()
-	passwordHash := string(hashed)
-
-	member := &ent.Member{
-		Email:       &email,
-		Password:    &passwordHash,
-		Phone:       in.Phone,
-		FirstnameTh: in.Firstname,
-		LastnameTh:  in.Lastname,
-		Role:        ent.MemberRoleCustomer,
-		Status:      ent.MemberStatusActive,
-		RegisterdAt: &now,
-	}
-
-	created, err := s.db.CreateMember(ctx, member)
-	if err != nil {
-		if strings.Contains(strings.ToLower(err.Error()), "duplicate") {
-			return nil, ErrEmailExists
-		}
-		span.RecordError(err)
-		log.Errf("auth.register.create.error email=%s err=%v", email, err)
-		return nil, err
-	}
-
-	pair, err := s.newTokenPair(created, now)
-	if err != nil {
-		span.RecordError(err)
-		return nil, err
-	}
-
-	log.Infof("auth.register.ok member_id=%s", created.ID)
-	return &AuthResult{
-		Member: toAuthMember(created),
-		Tokens: *pair,
-	}, nil
-}
-
-func (s *Service) Login(ctx context.Context, in *LoginInput) (*AuthResult, error) {
-	ctx, span, log := utils.NewLogSpan(ctx, s.tracer, "auth.Login")
-	defer span.End()
-
-	email := normalizeEmail(in.Email)
-	password := strings.TrimSpace(in.Password)
-	if email == "" || password == "" {
-		return nil, ErrInvalidCredentials
-	}
-
-	member, err := s.db.GetMemberByEmail(ctx, email)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, ErrInvalidCredentials
-		}
-		span.RecordError(err)
-		return nil, err
-	}
-
-	if member.Status != ent.MemberStatusActive {
-		return nil, ErrMemberNotActive
-	}
-
-	if member.Password == nil || !hashing.CheckPasswordHash([]byte(*member.Password), []byte(password)) {
-		return nil, ErrInvalidCredentials
-	}
-
-	now := time.Now()
-	if err := s.db.UpdateMemberLastLoginByID(ctx, member.ID, &now); err != nil {
-		log.Errf("auth.login.update_last_login.error member_id=%s err=%v", member.ID, err)
-	}
-	member.LastedLogin = &now
-
-	pair, err := s.newTokenPair(member, now)
-	if err != nil {
-		span.RecordError(err)
-		return nil, err
-	}
-
-	log.Infof("auth.login.ok member_id=%s", member.ID)
-	return &AuthResult{
-		Member: toAuthMember(member),
-		Tokens: *pair,
-	}, nil
-}
-
-func (s *Service) RefreshToken(ctx context.Context, refreshToken string) (*TokenPair, error) {
-	ctx, span, _ := utils.NewLogSpan(ctx, s.tracer, "auth.RefreshToken")
-	defer span.End()
-
-	payload, err := s.parseToken(refreshToken, "refresh")
-	if err != nil {
-		span.RecordError(err)
-		span.SetStatus(codes.Error, err.Error())
-		return nil, ErrInvalidToken
-	}
-
-	memberID, err := uuid.Parse(payload.Subject)
-	if err != nil {
-		return nil, ErrInvalidToken
-	}
-
-	member, err := s.db.GetMemberByID(ctx, memberID)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, ErrInvalidToken
-		}
-		return nil, err
-	}
-
-	if member.Status != ent.MemberStatusActive {
-		return nil, ErrMemberNotActive
-	}
-
-	return s.newTokenPair(member, time.Now())
-}
-
-func (s *Service) VerifyAccessToken(ctx context.Context, accessToken string) (*ent.Member, error) {
-	payload, err := s.parseToken(accessToken, "access")
-	if err != nil {
-		return nil, ErrInvalidToken
-	}
-
-	memberID, err := uuid.Parse(payload.Subject)
-	if err != nil {
-		return nil, ErrInvalidToken
-	}
-
-	member, err := s.db.GetMemberByID(ctx, memberID)
-	if err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, ErrInvalidToken
-		}
-		return nil, err
-	}
-
-	if member.Status != ent.MemberStatusActive {
-		return nil, ErrMemberNotActive
-	}
-
-	return member, nil
-}
-
-func (s *Service) Logout(ctx context.Context) error {
-	_, span, _ := utils.NewLogSpan(ctx, s.tracer, "auth.Logout")
-	defer span.End()
-	return nil
 }
 
 func (s *Service) newTokenPair(member *ent.Member, now time.Time) (*TokenPair, error) {

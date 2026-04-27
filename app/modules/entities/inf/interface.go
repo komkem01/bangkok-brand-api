@@ -100,19 +100,51 @@ type MemberEntity interface {
 // ContactEntity defines CRUD operations for the member_contacts table.
 type ContactEntity interface {
 	ListContacts(ctx context.Context) ([]*ent.MemberContact, error)
+	ListContactsByMemberID(ctx context.Context, memberID uuid.UUID) ([]*ent.MemberContact, error)
 	GetContactByID(ctx context.Context, id uuid.UUID) (*ent.MemberContact, error)
 	CreateContact(ctx context.Context, c *ent.MemberContact) (*ent.MemberContact, error)
 	UpdateContactByID(ctx context.Context, id uuid.UUID, c *ent.MemberContact) (*ent.MemberContact, error)
 	DeleteContactByID(ctx context.Context, id uuid.UUID) error
 }
 
+// ContactTypeEntity defines CRUD operations for the contact_types table.
+type ContactTypeEntity interface {
+	ListContactTypes(ctx context.Context) ([]*ent.ContactType, error)
+	GetContactTypeByID(ctx context.Context, id uuid.UUID) (*ent.ContactType, error)
+	GetContactTypeByNameEn(ctx context.Context, nameEn string) (*ent.ContactType, error)
+	CreateContactType(ctx context.Context, c *ent.ContactType) (*ent.ContactType, error)
+	UpdateContactTypeByID(ctx context.Context, id uuid.UUID, nameTh, nameEn string, isActive bool) (*ent.ContactType, error)
+	DeleteContactTypeByID(ctx context.Context, id uuid.UUID) error
+}
+
+// AddressTypeEntity defines CRUD operations for the address_types table.
+type AddressTypeEntity interface {
+	ListAddressTypes(ctx context.Context) ([]*ent.AddressType, error)
+	GetAddressTypeByID(ctx context.Context, id uuid.UUID) (*ent.AddressType, error)
+	GetAddressTypeByNameEn(ctx context.Context, nameEn string) (*ent.AddressType, error)
+	CreateAddressType(ctx context.Context, c *ent.AddressType) (*ent.AddressType, error)
+	UpdateAddressTypeByID(ctx context.Context, id uuid.UUID, nameTh, nameEn string, isActive bool) (*ent.AddressType, error)
+	DeleteAddressTypeByID(ctx context.Context, id uuid.UUID) error
+}
+
 // AddressEntity defines CRUD operations for the member_addresses table.
 type AddressEntity interface {
 	ListAddresses(ctx context.Context) ([]*ent.MemberAddress, error)
+	ListAddressesByMemberID(ctx context.Context, memberID uuid.UUID) ([]*ent.MemberAddress, error)
 	GetAddressByID(ctx context.Context, id uuid.UUID) (*ent.MemberAddress, error)
 	CreateAddress(ctx context.Context, a *ent.MemberAddress) (*ent.MemberAddress, error)
 	UpdateAddressByID(ctx context.Context, id uuid.UUID, a *ent.MemberAddress) (*ent.MemberAddress, error)
 	DeleteAddressByID(ctx context.Context, id uuid.UUID) error
+}
+
+// MemberDeviceEntity defines CRUD operations for the member_devices table.
+type MemberDeviceEntity interface {
+	ListMemberDevices(ctx context.Context) ([]*ent.MemberDevice, error)
+	ListMemberDevicesByMemberID(ctx context.Context, memberID uuid.UUID) ([]*ent.MemberDevice, error)
+	GetMemberDeviceByID(ctx context.Context, id uuid.UUID) (*ent.MemberDevice, error)
+	CreateMemberDevice(ctx context.Context, item *ent.MemberDevice) (*ent.MemberDevice, error)
+	UpdateMemberDeviceByID(ctx context.Context, id uuid.UUID, item *ent.MemberDevice) (*ent.MemberDevice, error)
+	DeleteMemberDeviceByID(ctx context.Context, id uuid.UUID) error
 }
 
 // ProductEntity defines CRUD operations for the products table.
@@ -399,4 +431,228 @@ type InvoiceEntity interface {
 	CreateInvoice(ctx context.Context, item *ent.Invoice) (*ent.Invoice, error)
 	UpdateInvoiceByID(ctx context.Context, id uuid.UUID, item *ent.Invoice) (*ent.Invoice, error)
 	DeleteInvoiceByID(ctx context.Context, id uuid.UUID) error
+}
+
+type AdminActionLogEntity interface {
+	ListAdminActionLogs(ctx context.Context) ([]*ent.AdminActionLog, error)
+	GetAdminActionLogByID(ctx context.Context, id uuid.UUID) (*ent.AdminActionLog, error)
+	CreateAdminActionLog(ctx context.Context, item *ent.AdminActionLog) (*ent.AdminActionLog, error)
+	UpdateAdminActionLogByID(ctx context.Context, id uuid.UUID, item *ent.AdminActionLog) (*ent.AdminActionLog, error)
+	DeleteAdminActionLogByID(ctx context.Context, id uuid.UUID) error
+}
+
+type ChatMessageEntity interface {
+	ListChatMessages(ctx context.Context) ([]*ent.ChatMessage, error)
+	GetChatMessageByID(ctx context.Context, id uuid.UUID) (*ent.ChatMessage, error)
+	CreateChatMessage(ctx context.Context, item *ent.ChatMessage) (*ent.ChatMessage, error)
+	UpdateChatMessageByID(ctx context.Context, id uuid.UUID, item *ent.ChatMessage) (*ent.ChatMessage, error)
+	DeleteChatMessageByID(ctx context.Context, id uuid.UUID) error
+}
+
+type ChatParticipantEntity interface {
+	ListChatParticipants(ctx context.Context) ([]*ent.ChatParticipant, error)
+	GetChatParticipantByID(ctx context.Context, id uuid.UUID) (*ent.ChatParticipant, error)
+	CreateChatParticipant(ctx context.Context, item *ent.ChatParticipant) (*ent.ChatParticipant, error)
+	UpdateChatParticipantByID(ctx context.Context, id uuid.UUID, item *ent.ChatParticipant) (*ent.ChatParticipant, error)
+	DeleteChatParticipantByID(ctx context.Context, id uuid.UUID) error
+}
+
+type CouponUsageEntity interface {
+	ListCouponUsages(ctx context.Context) ([]*ent.CouponUsage, error)
+	GetCouponUsageByID(ctx context.Context, id uuid.UUID) (*ent.CouponUsage, error)
+	CreateCouponUsage(ctx context.Context, item *ent.CouponUsage) (*ent.CouponUsage, error)
+	UpdateCouponUsageByID(ctx context.Context, id uuid.UUID, item *ent.CouponUsage) (*ent.CouponUsage, error)
+	DeleteCouponUsageByID(ctx context.Context, id uuid.UUID) error
+}
+
+type DisputeCaseEntity interface {
+	ListDisputeCases(ctx context.Context) ([]*ent.DisputeCase, error)
+	GetDisputeCaseByID(ctx context.Context, id uuid.UUID) (*ent.DisputeCase, error)
+	CreateDisputeCase(ctx context.Context, item *ent.DisputeCase) (*ent.DisputeCase, error)
+	UpdateDisputeCaseByID(ctx context.Context, id uuid.UUID, item *ent.DisputeCase) (*ent.DisputeCase, error)
+	DeleteDisputeCaseByID(ctx context.Context, id uuid.UUID) error
+}
+
+type DisputeMessageEntity interface {
+	ListDisputeMessages(ctx context.Context) ([]*ent.DisputeMessage, error)
+	GetDisputeMessageByID(ctx context.Context, id uuid.UUID) (*ent.DisputeMessage, error)
+	CreateDisputeMessage(ctx context.Context, item *ent.DisputeMessage) (*ent.DisputeMessage, error)
+	UpdateDisputeMessageByID(ctx context.Context, id uuid.UUID, item *ent.DisputeMessage) (*ent.DisputeMessage, error)
+	DeleteDisputeMessageByID(ctx context.Context, id uuid.UUID) error
+}
+
+type FlashSaleItemEntity interface {
+	ListFlashSaleItems(ctx context.Context) ([]*ent.FlashSaleItem, error)
+	GetFlashSaleItemByID(ctx context.Context, id uuid.UUID) (*ent.FlashSaleItem, error)
+	CreateFlashSaleItem(ctx context.Context, item *ent.FlashSaleItem) (*ent.FlashSaleItem, error)
+	UpdateFlashSaleItemByID(ctx context.Context, id uuid.UUID, item *ent.FlashSaleItem) (*ent.FlashSaleItem, error)
+	DeleteFlashSaleItemByID(ctx context.Context, id uuid.UUID) error
+}
+
+type InvoiceItemEntity interface {
+	ListInvoiceItems(ctx context.Context) ([]*ent.InvoiceItem, error)
+	GetInvoiceItemByID(ctx context.Context, id uuid.UUID) (*ent.InvoiceItem, error)
+	CreateInvoiceItem(ctx context.Context, item *ent.InvoiceItem) (*ent.InvoiceItem, error)
+	UpdateInvoiceItemByID(ctx context.Context, id uuid.UUID, item *ent.InvoiceItem) (*ent.InvoiceItem, error)
+	DeleteInvoiceItemByID(ctx context.Context, id uuid.UUID) error
+}
+
+type KYCDocumentEntity interface {
+	ListKYCDocuments(ctx context.Context) ([]*ent.KYCDocument, error)
+	GetKYCDocumentByID(ctx context.Context, id uuid.UUID) (*ent.KYCDocument, error)
+	CreateKYCDocument(ctx context.Context, item *ent.KYCDocument) (*ent.KYCDocument, error)
+	UpdateKYCDocumentByID(ctx context.Context, id uuid.UUID, item *ent.KYCDocument) (*ent.KYCDocument, error)
+	DeleteKYCDocumentByID(ctx context.Context, id uuid.UUID) error
+}
+
+type KYCStatusHistoryEntity interface {
+	ListKYCStatusHistories(ctx context.Context) ([]*ent.KYCStatusHistory, error)
+	GetKYCStatusHistoryByID(ctx context.Context, id uuid.UUID) (*ent.KYCStatusHistory, error)
+	CreateKYCStatusHistory(ctx context.Context, item *ent.KYCStatusHistory) (*ent.KYCStatusHistory, error)
+	UpdateKYCStatusHistoryByID(ctx context.Context, id uuid.UUID, item *ent.KYCStatusHistory) (*ent.KYCStatusHistory, error)
+	DeleteKYCStatusHistoryByID(ctx context.Context, id uuid.UUID) error
+}
+
+type OrderShipmentEntity interface {
+	ListOrderShipments(ctx context.Context) ([]*ent.OrderShipment, error)
+	GetOrderShipmentByID(ctx context.Context, id uuid.UUID) (*ent.OrderShipment, error)
+	CreateOrderShipment(ctx context.Context, item *ent.OrderShipment) (*ent.OrderShipment, error)
+	UpdateOrderShipmentByID(ctx context.Context, id uuid.UUID, item *ent.OrderShipment) (*ent.OrderShipment, error)
+	DeleteOrderShipmentByID(ctx context.Context, id uuid.UUID) error
+}
+
+type PointSettingEntity interface {
+	ListPointSettings(ctx context.Context) ([]*ent.PointSetting, error)
+	GetPointSettingByID(ctx context.Context, id uuid.UUID) (*ent.PointSetting, error)
+	CreatePointSetting(ctx context.Context, item *ent.PointSetting) (*ent.PointSetting, error)
+	UpdatePointSettingByID(ctx context.Context, id uuid.UUID, item *ent.PointSetting) (*ent.PointSetting, error)
+	DeletePointSettingByID(ctx context.Context, id uuid.UUID) error
+}
+
+type ProductReviewImageEntity interface {
+	ListProductReviewImages(ctx context.Context) ([]*ent.ProductReviewImage, error)
+	GetProductReviewImageByID(ctx context.Context, id uuid.UUID) (*ent.ProductReviewImage, error)
+	CreateProductReviewImage(ctx context.Context, item *ent.ProductReviewImage) (*ent.ProductReviewImage, error)
+	UpdateProductReviewImageByID(ctx context.Context, id uuid.UUID, item *ent.ProductReviewImage) (*ent.ProductReviewImage, error)
+	DeleteProductReviewImageByID(ctx context.Context, id uuid.UUID) error
+}
+
+type ProductVariantStockEntity interface {
+	ListProductVariantStocks(ctx context.Context) ([]*ent.ProductVariantStock, error)
+	GetProductVariantStockByID(ctx context.Context, id uuid.UUID) (*ent.ProductVariantStock, error)
+	CreateProductVariantStock(ctx context.Context, item *ent.ProductVariantStock) (*ent.ProductVariantStock, error)
+	UpdateProductVariantStockByID(ctx context.Context, id uuid.UUID, item *ent.ProductVariantStock) (*ent.ProductVariantStock, error)
+	DeleteProductVariantStockByID(ctx context.Context, id uuid.UUID) error
+}
+
+type ProductVariantValueEntity interface {
+	ListProductVariantValues(ctx context.Context) ([]*ent.ProductVariantValue, error)
+	GetProductVariantValueByID(ctx context.Context, id uuid.UUID) (*ent.ProductVariantValue, error)
+	CreateProductVariantValue(ctx context.Context, item *ent.ProductVariantValue) (*ent.ProductVariantValue, error)
+	UpdateProductVariantValueByID(ctx context.Context, id uuid.UUID, item *ent.ProductVariantValue) (*ent.ProductVariantValue, error)
+	DeleteProductVariantValueByID(ctx context.Context, id uuid.UUID) error
+}
+
+type RefundTransactionEntity interface {
+	ListRefundTransactions(ctx context.Context) ([]*ent.RefundTransaction, error)
+	GetRefundTransactionByID(ctx context.Context, id uuid.UUID) (*ent.RefundTransaction, error)
+	CreateRefundTransaction(ctx context.Context, item *ent.RefundTransaction) (*ent.RefundTransaction, error)
+	UpdateRefundTransactionByID(ctx context.Context, id uuid.UUID, item *ent.RefundTransaction) (*ent.RefundTransaction, error)
+	DeleteRefundTransactionByID(ctx context.Context, id uuid.UUID) error
+}
+
+type ReturnItemEntity interface {
+	ListReturnItems(ctx context.Context) ([]*ent.ReturnItem, error)
+	GetReturnItemByID(ctx context.Context, id uuid.UUID) (*ent.ReturnItem, error)
+	CreateReturnItem(ctx context.Context, item *ent.ReturnItem) (*ent.ReturnItem, error)
+	UpdateReturnItemByID(ctx context.Context, id uuid.UUID, item *ent.ReturnItem) (*ent.ReturnItem, error)
+	DeleteReturnItemByID(ctx context.Context, id uuid.UUID) error
+}
+
+type RewardRedemptionEntity interface {
+	ListRewardRedemptions(ctx context.Context) ([]*ent.RewardRedemption, error)
+	GetRewardRedemptionByID(ctx context.Context, id uuid.UUID) (*ent.RewardRedemption, error)
+	CreateRewardRedemption(ctx context.Context, item *ent.RewardRedemption) (*ent.RewardRedemption, error)
+	UpdateRewardRedemptionByID(ctx context.Context, id uuid.UUID, item *ent.RewardRedemption) (*ent.RewardRedemption, error)
+	DeleteRewardRedemptionByID(ctx context.Context, id uuid.UUID) error
+}
+
+type RewardEntity interface {
+	ListRewards(ctx context.Context) ([]*ent.Reward, error)
+	GetRewardByID(ctx context.Context, id uuid.UUID) (*ent.Reward, error)
+	CreateReward(ctx context.Context, item *ent.Reward) (*ent.Reward, error)
+	UpdateRewardByID(ctx context.Context, id uuid.UUID, item *ent.Reward) (*ent.Reward, error)
+	DeleteRewardByID(ctx context.Context, id uuid.UUID) error
+}
+
+type SettlementItemEntity interface {
+	ListSettlementItems(ctx context.Context) ([]*ent.SettlementItem, error)
+	GetSettlementItemByID(ctx context.Context, id uuid.UUID) (*ent.SettlementItem, error)
+	CreateSettlementItem(ctx context.Context, item *ent.SettlementItem) (*ent.SettlementItem, error)
+	UpdateSettlementItemByID(ctx context.Context, id uuid.UUID, item *ent.SettlementItem) (*ent.SettlementItem, error)
+	DeleteSettlementItemByID(ctx context.Context, id uuid.UUID) error
+}
+
+type ShipmentTrackingHistoryEntity interface {
+	ListShipmentTrackingHistories(ctx context.Context) ([]*ent.ShipmentTrackingHistory, error)
+	GetShipmentTrackingHistoryByID(ctx context.Context, id uuid.UUID) (*ent.ShipmentTrackingHistory, error)
+	CreateShipmentTrackingHistory(ctx context.Context, item *ent.ShipmentTrackingHistory) (*ent.ShipmentTrackingHistory, error)
+	UpdateShipmentTrackingHistoryByID(ctx context.Context, id uuid.UUID, item *ent.ShipmentTrackingHistory) (*ent.ShipmentTrackingHistory, error)
+	DeleteShipmentTrackingHistoryByID(ctx context.Context, id uuid.UUID) error
+}
+
+type ShopMemberEntity interface {
+	ListShopMembers(ctx context.Context) ([]*ent.ShopMember, error)
+	GetShopMemberByID(ctx context.Context, id uuid.UUID) (*ent.ShopMember, error)
+	CreateShopMember(ctx context.Context, item *ent.ShopMember) (*ent.ShopMember, error)
+	UpdateShopMemberByID(ctx context.Context, id uuid.UUID, item *ent.ShopMember) (*ent.ShopMember, error)
+	DeleteShopMemberByID(ctx context.Context, id uuid.UUID) error
+}
+
+type ShopSettingEntity interface {
+	ListShopSettings(ctx context.Context) ([]*ent.ShopSetting, error)
+	GetShopSettingByID(ctx context.Context, id uuid.UUID) (*ent.ShopSetting, error)
+	CreateShopSetting(ctx context.Context, item *ent.ShopSetting) (*ent.ShopSetting, error)
+	UpdateShopSettingByID(ctx context.Context, id uuid.UUID, item *ent.ShopSetting) (*ent.ShopSetting, error)
+	DeleteShopSettingByID(ctx context.Context, id uuid.UUID) error
+}
+
+type ShippingZoneAreaEntity interface {
+	ListShippingZoneAreas(ctx context.Context) ([]*ent.ShippingZoneArea, error)
+	GetShippingZoneAreaByID(ctx context.Context, id uuid.UUID) (*ent.ShippingZoneArea, error)
+	CreateShippingZoneArea(ctx context.Context, item *ent.ShippingZoneArea) (*ent.ShippingZoneArea, error)
+	UpdateShippingZoneAreaByID(ctx context.Context, id uuid.UUID, item *ent.ShippingZoneArea) (*ent.ShippingZoneArea, error)
+	DeleteShippingZoneAreaByID(ctx context.Context, id uuid.UUID) error
+}
+
+type ShopShippingMethodEntity interface {
+	ListShopShippingMethods(ctx context.Context) ([]*ent.ShopShippingMethod, error)
+	GetShopShippingMethodByID(ctx context.Context, id uuid.UUID) (*ent.ShopShippingMethod, error)
+	CreateShopShippingMethod(ctx context.Context, item *ent.ShopShippingMethod) (*ent.ShopShippingMethod, error)
+	UpdateShopShippingMethodByID(ctx context.Context, id uuid.UUID, item *ent.ShopShippingMethod) (*ent.ShopShippingMethod, error)
+	DeleteShopShippingMethodByID(ctx context.Context, id uuid.UUID) error
+}
+
+type ShippingRateRuleEntity interface {
+	ListShippingRateRules(ctx context.Context) ([]*ent.ShippingRateRule, error)
+	GetShippingRateRuleByID(ctx context.Context, id uuid.UUID) (*ent.ShippingRateRule, error)
+	CreateShippingRateRule(ctx context.Context, item *ent.ShippingRateRule) (*ent.ShippingRateRule, error)
+	UpdateShippingRateRuleByID(ctx context.Context, id uuid.UUID, item *ent.ShippingRateRule) (*ent.ShippingRateRule, error)
+	DeleteShippingRateRuleByID(ctx context.Context, id uuid.UUID) error
+}
+
+type ShippingMethodEntity interface {
+	ListShippingMethods(ctx context.Context) ([]*ent.ShippingMethod, error)
+	GetShippingMethodByID(ctx context.Context, id uuid.UUID) (*ent.ShippingMethod, error)
+	CreateShippingMethod(ctx context.Context, item *ent.ShippingMethod) (*ent.ShippingMethod, error)
+	UpdateShippingMethodByID(ctx context.Context, id uuid.UUID, item *ent.ShippingMethod) (*ent.ShippingMethod, error)
+	DeleteShippingMethodByID(ctx context.Context, id uuid.UUID) error
+}
+
+type ShopWalletTransactionEntity interface {
+	ListShopWalletTransactions(ctx context.Context) ([]*ent.ShopWalletTransaction, error)
+	GetShopWalletTransactionByID(ctx context.Context, id uuid.UUID) (*ent.ShopWalletTransaction, error)
+	CreateShopWalletTransaction(ctx context.Context, item *ent.ShopWalletTransaction) (*ent.ShopWalletTransaction, error)
+	UpdateShopWalletTransactionByID(ctx context.Context, id uuid.UUID, item *ent.ShopWalletTransaction) (*ent.ShopWalletTransaction, error)
+	DeleteShopWalletTransactionByID(ctx context.Context, id uuid.UUID) error
 }

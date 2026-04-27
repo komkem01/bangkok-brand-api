@@ -21,6 +21,16 @@ func (s *Service) ListContacts(ctx context.Context) ([]*ent.MemberContact, error
 	return contacts, err
 }
 
+func (s *Service) ListContactsByMemberID(ctx context.Context, memberID uuid.UUID) ([]*ent.MemberContact, error) {
+	var contacts []*ent.MemberContact
+	err := s.db.NewSelect().
+		Model(&contacts).
+		Where("member_id = ?", memberID).
+		OrderExpr("created_at DESC").
+		Scan(ctx)
+	return contacts, err
+}
+
 func (s *Service) GetContactByID(ctx context.Context, id uuid.UUID) (*ent.MemberContact, error) {
 	contact := &ent.MemberContact{}
 	err := s.db.NewSelect().

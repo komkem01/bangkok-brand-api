@@ -1,6 +1,9 @@
 package address
 
 import (
+	"fmt"
+
+	"bangkok-brand/app/modules/auth"
 	"bangkok-brand/app/modules/entities/ent"
 	"bangkok-brand/app/utils"
 	"bangkok-brand/app/utils/base"
@@ -64,7 +67,13 @@ func (c *Controller) List(ctx *gin.Context) {
 	span, log := utils.LogSpanFromGin(ctx)
 	defer span.End()
 
-	items, err := c.svc.List(ctx.Request.Context())
+	memberID, err := currentMemberID(ctx)
+	if err != nil {
+		base.Unauthorized(ctx, i18n.Unauthorized, nil)
+		return
+	}
+
+	items, err := c.svc.ListByMemberID(ctx.Request.Context(), memberID)
 	if err != nil {
 		log.Errf("address.list.error: %v", err)
 		base.InternalServerError(ctx, i18n.AddressListFailed, nil)
@@ -77,4 +86,24 @@ func (c *Controller) List(ctx *gin.Context) {
 	}
 
 	base.Success(ctx, res)
+}
+
+func currentMemberID(ctx *gin.Context) (uuid.UUID, error) {
+	v, ok := ctx.Get(auth.ContextKeyMemberID)
+	if !ok {
+		return uuid.Nil, fmt.Errorf("missing member id")
+	}
+
+	switch id := v.(type) {
+	case uuid.UUID:
+		return id, nil
+	case string:
+		parsed, err := uuid.Parse(id)
+		if err != nil {
+			return uuid.Nil, err
+		}
+		return parsed, nil
+	default:
+		return uuid.Nil, fmt.Errorf("invalid member id type")
+	}
 }

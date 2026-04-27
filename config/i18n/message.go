@@ -94,6 +94,22 @@ var (
 	ContactUpdateFailed = "contact-update-failed"
 	ContactDeleteFailed = "contact-delete-failed"
 
+	ContactTypeInvalidID    = "contact-type-invalid-id"
+	ContactTypeNotFound     = "contact-type-not-found"
+	ContactTypeCreateFailed = "contact-type-create-failed"
+	ContactTypeListFailed   = "contact-type-list-failed"
+	ContactTypeInfoFailed   = "contact-type-info-failed"
+	ContactTypeUpdateFailed = "contact-type-update-failed"
+	ContactTypeDeleteFailed = "contact-type-delete-failed"
+
+	AddressTypeInvalidID    = "address-type-invalid-id"
+	AddressTypeNotFound     = "address-type-not-found"
+	AddressTypeCreateFailed = "address-type-create-failed"
+	AddressTypeListFailed   = "address-type-list-failed"
+	AddressTypeInfoFailed   = "address-type-info-failed"
+	AddressTypeUpdateFailed = "address-type-update-failed"
+	AddressTypeDeleteFailed = "address-type-delete-failed"
+
 	AddressInvalidID    = "address-invalid-id"
 	AddressNotFound     = "address-not-found"
 	AddressCreateFailed = "address-create-failed"
@@ -101,6 +117,14 @@ var (
 	AddressInfoFailed   = "address-info-failed"
 	AddressUpdateFailed = "address-update-failed"
 	AddressDeleteFailed = "address-delete-failed"
+
+	MemberDeviceInvalidID    = "member-device-invalid-id"
+	MemberDeviceNotFound     = "member-device-not-found"
+	MemberDeviceCreateFailed = "member-device-create-failed"
+	MemberDeviceListFailed   = "member-device-list-failed"
+	MemberDeviceInfoFailed   = "member-device-info-failed"
+	MemberDeviceUpdateFailed = "member-device-update-failed"
+	MemberDeviceDeleteFailed = "member-device-delete-failed"
 
 	BrandInvalidID    = "brand-invalid-id"
 	BrandNotFound     = "brand-not-found"

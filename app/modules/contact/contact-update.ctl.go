@@ -17,7 +17,6 @@ type UpdateUriRequest struct {
 }
 
 type UpdateBodyRequest struct {
-	MemberID      *string `json:"member_id"`
 	ContactTypeID *string `json:"contact_type_id"`
 	Value         *string `json:"value"`
 	IsPrimary     *bool   `json:"is_primary"`
@@ -42,6 +41,12 @@ func (c *Controller) Update(ctx *gin.Context) {
 	}
 
 	id := uuid.MustParse(uri.ID)
+	memberID, err := currentMemberID(ctx)
+	if err != nil {
+		base.Unauthorized(ctx, i18n.Unauthorized, nil)
+		return
+	}
+
 	current, err := c.svc.Info(ctx.Request.Context(), id)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -53,15 +58,12 @@ func (c *Controller) Update(ctx *gin.Context) {
 		return
 	}
 
-	input := *current
-	if body.MemberID != nil {
-		v, err := uuid.Parse(*body.MemberID)
-		if err != nil {
-			base.BadRequest(ctx, i18n.BadRequest, nil)
-			return
-		}
-		input.MemberID = &v
+	if current.MemberID == nil || *current.MemberID != memberID {
+		base.BadRequest(ctx, i18n.ContactNotFound, nil)
+		return
 	}
+
+	input := *current
 	if body.ContactTypeID != nil {
 		v, err := uuid.Parse(*body.ContactTypeID)
 		if err != nil {
